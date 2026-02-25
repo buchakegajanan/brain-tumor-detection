@@ -1,6 +1,6 @@
 # Core Deep Learning
-tensorflow>=2.16.0
-keras>=3.0.0
+tensorflow==2.16.1
+keras==3.3.3
 
 # Data Processing
 numpy==1.24.3
