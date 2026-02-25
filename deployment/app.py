@@ -17,7 +17,7 @@ try:
     TF_AVAILABLE = True
 except ImportError:
     TF_AVAILABLE = False
-    print("⚠ TensorFlow not available. Install it to use predictions.")
+    print("WARNING: TensorFlow not available. Install it to use predictions.")
 
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -51,17 +51,19 @@ def load_model():
     """Load trained model"""
     global model
     if not TF_AVAILABLE:
-        print("⚠ TensorFlow not installed. Cannot load model.")
+        print("WARNING: TensorFlow not installed. Cannot load model.")
         return
     try:
         if os.path.exists(MODEL_PATH):
+            print(f"Loading model from {MODEL_PATH}...")
             model = tf.keras.models.load_model(MODEL_PATH)
-            print(f"✓ Model loaded from {MODEL_PATH}")
+            print(f"Model loaded successfully!")
         else:
-            print(f"⚠ Model not found at {MODEL_PATH}")
-            print("  Please train the model first!")
+            print(f"WARNING: Model not found at {MODEL_PATH}")
+            print("App will run without prediction capability.")
     except Exception as e:
-        print(f"✗ Error loading model: {e}")
+        print(f"ERROR: Error loading model: {e}")
+        print("App will run without prediction capability.")
 
 def allowed_file(filename):
     """Check if file extension is allowed"""
@@ -273,19 +275,20 @@ def internal_error(error):
     db.session.rollback()
     return render_template('500.html'), 500
 
+# Create upload directory
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+# Load model in background (don't block startup)
+print("Starting application...")
+load_model()
+
 if __name__ == '__main__':
-    # Create upload directory
-    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    
-    # Load model
-    load_model()
-    
     # Run app
     print("\n" + "="*70)
-    print("🧠 BRAIN TUMOR DETECTION WEB APPLICATION")
+    print("BRAIN TUMOR DETECTION WEB APPLICATION")
     print("="*70)
-    print("\n✓ Server starting...")
-    print("✓ Access the application at: http://localhost:5000")
+    print("\nServer starting...")
+    print("Access the application at: http://localhost:5000")
     print("\n" + "="*70 + "\n")
     
     app.run(debug=True, host='0.0.0.0', port=5000)
