@@ -1,0 +1,15 @@
+# Minimal requirements for Python 3.12
+tensorflow>=2.16.0
+numpy
+pandas
+opencv-python
+scikit-learn
+matplotlib
+seaborn
+flask
+flask-sqlalchemy
+flask-login
+flask-bcrypt
+pillow
+pyyaml
+tqdm

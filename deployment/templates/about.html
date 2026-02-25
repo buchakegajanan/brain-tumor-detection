@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">About This Project</h1>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3>Project Overview</h3>
+            <p>
+                This is an end-to-end deep learning project for automated brain tumor detection
+                from MRI images. It uses state-of-the-art CNN architectures and transfer learning
+                to achieve high accuracy in tumor classification.
+            </p>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3>Technology Stack</h3>
+            <ul>
+                <li><strong>Deep Learning:</strong> TensorFlow, Keras</li>
+                <li><strong>Models:</strong> Custom CNN, MobileNetV2, ResNet50</li>
+                <li><strong>Explainability:</strong> Grad-CAM</li>
+                <li><strong>Web Framework:</strong> Flask</li>
+                <li><strong>Database:</strong> SQLite/MySQL</li>
+                <li><strong>Frontend:</strong> Bootstrap 5, HTML, CSS, JavaScript</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3>Features</h3>
+            <ul>
+                <li>User authentication and registration</li>
+                <li>MRI image upload and prediction</li>
+                <li>Grad-CAM visualization for explainability</li>
+                <li>Prediction history tracking</li>
+                <li>Confidence score display</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="alert alert-warning">
+        <h5><i class="fas fa-exclamation-triangle"></i> Disclaimer</h5>
+        <p class="mb-0">
+            This is an educational project for academic purposes only. 
+            It should not be used for actual medical diagnosis or treatment decisions.
+        </p>
+    </div>
+</div>
+{% endblock %}

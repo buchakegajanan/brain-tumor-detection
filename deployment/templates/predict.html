@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header text-white text-center py-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <h3 class="mb-0 fw-bold"><i class="fas fa-upload"></i> Upload MRI Scan for Analysis</h3>
+                    <p class="mb-0 mt-2 small">Our AI will analyze your scan in seconds</p>
+                </div>
+                <div class="card-body p-5">
+                    <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold"><i class="fas fa-image"></i> Select MRI Image</label>
+                            <input type="file" class="form-control form-control-lg" id="fileInput" name="file" accept=".png,.jpg,.jpeg" required>
+                            <small class="text-muted"><i class="fas fa-info-circle"></i> Supported formats: PNG, JPG, JPEG (Max 16MB)</small>
+                        </div>
+                        
+                        <div id="imagePreview" class="mb-4" style="display: none;">
+                            <label class="form-label fw-bold">Preview:</label>
+                            <div class="text-center image-preview">
+                                <img id="preview" src="" alt="Preview" class="img-fluid" style="max-height: 400px;">
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-3">
+                            <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                <i class="fas fa-brain"></i> Analyze MRI Scan
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div id="loadingSpinner" class="loading-spinner">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-3 fw-bold">Analyzing MRI scan... Please wait.</p>
+                        <p class="text-muted small">Our AI is processing your image</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Instructions Card -->
+            <div class="card mt-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold"><i class="fas fa-lightbulb text-warning"></i> Quick Guide</h5>
+                    <ol class="mb-0">
+                        <li class="mb-2">Select a brain MRI scan image from your device</li>
+                        <li class="mb-2">Supported formats: PNG, JPG, JPEG (Maximum 16MB)</li>
+                        <li class="mb-2">Click "Analyze MRI Scan" to get instant results</li>
+                        <li class="mb-2">View prediction with confidence score and Grad-CAM visualization</li>
+                        <li>Access your analysis history anytime from the History page</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Image preview
+document.getElementById('fileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('preview').src = e.target.result;
+            document.getElementById('imagePreview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Form submission
+document.getElementById('uploadForm').addEventListener('submit', function() {
+    document.getElementById('submitBtn').disabled = true;
+    document.getElementById('submitBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    document.getElementById('loadingSpinner').style.display = 'block';
+});
+
+// Reset form
+function resetForm() {
+    document.getElementById('uploadForm').reset();
+    document.getElementById('imagePreview').style.display = 'none';
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('submitBtn').innerHTML = '<i class="fas fa-brain"></i> Analyze MRI Scan';
+}
+</script>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Result Card -->
+    <div class="card shadow-lg mb-4">
+        <div class="card-header text-white text-center py-4" style="background: {% if prediction == 'Tumor' %}linear-gradient(135deg, #f093fb 0%, #f5576c 100%){% else %}linear-gradient(135deg, #4facfe 0%, #00f2fe 100%){% endif %};">
+            <h3 class="mb-0 fw-bold">
+                <i class="fas {% if prediction == 'Tumor' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %}"></i> 
+                Analysis Complete
+            </h3>
+        </div>
+        <div class="card-body p-5">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center">
+                    <h5 class="text-muted mb-3">Diagnosis Result</h5>
+                    <h1 class="display-3 fw-bold mb-4" style="color: {% if prediction == 'Tumor' %}#f5576c{% else %}#00f2fe{% endif %};">
+                        {{ prediction }}
+                    </h1>
+                    
+                    <div class="mb-4">
+                        <h6 class="text-muted mb-2">Confidence Level</h6>
+                        <div class="progress" style="height: 35px;">
+                            <div class="progress-bar" role="progressbar" 
+                                 style="width: {{ confidence }}%; background: {% if prediction == 'Tumor' %}linear-gradient(135deg, #f093fb 0%, #f5576c 100%){% else %}linear-gradient(135deg, #4facfe 0%, #00f2fe 100%){% endif %};" 
+                                 aria-valuenow="{{ confidence }}" aria-valuemin="0" aria-valuemax="100">
+                                <span class="fw-bold">{{ "%.2f"|format(confidence) }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="badge-custom {% if prediction == 'Tumor' %}bg-danger{% else %}bg-success{% endif %} text-white mb-3">
+                        <i class="fas fa-clock"></i> Processed in {{ "%.3f"|format(processing_time) }}s
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <h5 class="text-center text-muted mb-3">Original MRI Scan</h5>
+                    <div class="image-preview">
+                        <img src="/uploads/{{ image_path }}" alt="MRI" class="img-fluid rounded shadow">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grad-CAM Visualization -->
+    {% if gradcam_path %}
+    <div class="card shadow-lg mb-4">
+        <div class="card-header text-white text-center py-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <h4 class="mb-0 fw-bold"><i class="fas fa-eye"></i> AI Explainability - Grad-CAM Heatmap</h4>
+            <p class="mb-0 mt-2 small">Visual explanation of the AI's decision-making process</p>
+        </div>
+        <div class="card-body p-5 text-center">
+            <div class="image-preview d-inline-block">
+                <img src="/uploads/{{ gradcam_path }}" alt="Grad-CAM" class="img-fluid rounded shadow" style="max-height: 500px;">
+            </div>
+            <div class="alert alert-info mt-4 text-start" style="border-radius: 15px; border-left: 5px solid #17a2b8;">
+                <h6 class="alert-heading fw-bold"><i class="fas fa-info-circle"></i> Understanding the Heatmap</h6>
+                <ul class="mb-0">
+                    <li><strong style="color: #ff0000;">Red/Yellow regions:</strong> High importance areas that strongly influenced the prediction</li>
+                    <li><strong style="color: #0000ff;">Blue/Purple regions:</strong> Low importance areas with minimal influence</li>
+                    <li>The AI focuses on specific brain regions to make its decision, providing transparency and trust</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Clinical Interpretation -->
+    <div class="card shadow-lg mb-4">
+        <div class="card-header text-white text-center py-3" style="background: linear-gradient(135deg, #ffa751 0%, #ffe259 100%);">
+            <h5 class="mb-0 fw-bold"><i class="fas fa-stethoscope"></i> Clinical Interpretation</h5>
+        </div>
+        <div class="card-body p-4">
+            {% if prediction == 'Tumor' %}
+            <div class="alert alert-danger" style="border-radius: 15px; border-left: 5px solid #dc3545;">
+                <h6 class="alert-heading fw-bold"><i class="fas fa-exclamation-triangle"></i> Potential Tumor Detected</h6>
+                <p class="mb-3">The AI model has identified patterns consistent with a brain tumor in the MRI scan.</p>
+                <hr>
+                <h6 class="fw-bold">Recommended Next Steps:</h6>
+                <ul class="mb-0">
+                    <li>Consult with a qualified radiologist or neurologist immediately</li>
+                    <li>Schedule additional diagnostic tests (CT scan, PET scan, or biopsy)</li>
+                    <li>Do not rely solely on AI prediction for medical decisions</li>
+                    <li>Discuss treatment options with healthcare professionals</li>
+                    <li>Seek a second medical opinion if needed</li>
+                </ul>
+            </div>
+            {% else %}
+            <div class="alert alert-success" style="border-radius: 15px; border-left: 5px solid #28a745;">
+                <h6 class="alert-heading fw-bold"><i class="fas fa-check-circle"></i> No Tumor Detected</h6>
+                <p class="mb-3">The AI model did not identify patterns consistent with a brain tumor in this MRI scan.</p>
+                <hr>
+                <h6 class="fw-bold">Important Reminders:</h6>
+                <ul class="mb-0">
+                    <li>This is a screening tool, not a definitive medical diagnosis</li>
+                    <li>Regular health check-ups are still recommended</li>
+                    <li>Consult a doctor if you experience any neurological symptoms</li>
+                    <li>AI systems can have false negatives - always seek professional medical advice</li>
+                    <li>Maintain a healthy lifestyle and follow medical guidance</li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-grid gap-3 d-md-flex justify-content-md-center mb-4">
+        <a href="/predict" class="btn btn-primary btn-lg px-5">
+            <i class="fas fa-upload"></i> Analyze Another Scan
+        </a>
+        <a href="/history" class="btn btn-outline-primary btn-lg px-5">
+            <i class="fas fa-history"></i> View All Results
+        </a>
+    </div>
+
+    <!-- Medical Disclaimer -->
+    <div class="alert alert-warning" style="border-radius: 15px; border-left: 5px solid #ffc107;">
+        <h6 class="alert-heading fw-bold"><i class="fas fa-shield-alt"></i> Medical Disclaimer</h6>
+        <p class="mb-0 small">
+            This AI system is designed for educational and research purposes only. It should <strong>NOT</strong> be used as a 
+            substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of qualified healthcare 
+            providers with any questions regarding medical conditions. Never disregard professional medical advice or delay seeking 
+            it because of information provided by this system.
+        </p>
+    </div>
+</div>
+{% endblock %}

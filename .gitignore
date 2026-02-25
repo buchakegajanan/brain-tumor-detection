@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Data - Don't upload large datasets
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Models - Don't upload large model files
+models/*.h5
+models/*.keras
+!models/.gitkeep
+
+# Results
+results/plots/*
+!results/plots/.gitkeep
+
+# Uploads - Don't upload user images
+deployment/static/uploads/*
+!deployment/static/uploads/.gitkeep
+
+# Database - Don't upload user data
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+config_local.yaml
+
+# Large files
+*.zip
+*.tar.gz
+archive*/
