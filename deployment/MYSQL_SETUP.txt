@@ -1,0 +1,22 @@
+"""
+MySQL Database Setup Instructions
+"""
+
+# 1. Install MySQL Server if not installed
+# Download from: https://dev.mysql.com/downloads/mysql/
+
+# 2. Open MySQL Command Line Client or MySQL Workbench
+
+# 3. Run this SQL command:
+CREATE DATABASE brain_tumor_db;
+
+# 4. Update app.py with your MySQL credentials:
+# Format: mysql+pymysql://username:password@localhost/brain_tumor_db
+# Current: mysql+pymysql://root:@localhost/brain_tumor_db
+# If you have password: mysql+pymysql://root:yourpassword@localhost/brain_tumor_db
+
+# 5. Run the initialization script:
+# python init_database.py
+
+# 6. Start the Flask app:
+# python app.py

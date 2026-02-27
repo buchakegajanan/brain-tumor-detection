@@ -82,5 +82,8 @@ def init_db(app):
     bcrypt.init_app(app)
     
     with app.app_context():
+        # Import models to ensure they're registered
+        from deployment.database import User, Prediction
         db.create_all()
-        print("✓ Database initialized successfully")
+        print("[OK] Database tables created successfully")
+        print(f"[OK] Database location: {app.config['SQLALCHEMY_DATABASE_URI']}")

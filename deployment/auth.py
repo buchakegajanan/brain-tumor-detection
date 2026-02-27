@@ -63,14 +63,20 @@ def register():
             return render_template('register.html')
         
         # Create new user
-        new_user = User(username=username, email=email)
-        new_user.set_password(password)
-        
-        db.session.add(new_user)
-        db.session.commit()
-        
-        flash('Registration successful! Please log in.', 'success')
-        return redirect(url_for('auth.login'))
+        try:
+            new_user = User(username=username, email=email)
+            new_user.set_password(password)
+            
+            db.session.add(new_user)
+            db.session.commit()
+            
+            flash('Registration successful! Please log in.', 'success')
+            return redirect(url_for('auth.login'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Registration failed: {str(e)}', 'danger')
+            print(f"Registration error: {e}")
+            return render_template('register.html')
     
     return render_template('register.html')
 
